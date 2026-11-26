@@ -136,15 +136,29 @@
         width: 28px;
         height: 28px;
         border-radius: 50%;
-        background: rgba(90, 16, 28, 0.75);
-        border: 1px solid rgba(255, 255, 255, 0.9);
-        color: #FFFFFF;
+        background: #FFFFFF;
+        border: 1.5px solid rgba(90, 16, 28, 0.35);
+        color: #5A101C;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         text-align: center;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+        padding: 2px;
+    }
+    .p-watermark-badge.fallback-badge {
+        background: rgba(90, 16, 28, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        color: #FFFFFF;
+    }
+    .p-watermark-logo-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 50%;
+        display: block;
     }
     .p-watermark-icon { font-size: 11px; }
     .p-watermark-text { display: none; }
@@ -307,9 +321,12 @@
                                     <img src="{{ $product->thumbnail_url }}" alt="{{ $product->name }}" loading="lazy">
                                 </a>
                                 <div class="p-watermark-overlay">
-                                    <div class="p-watermark-badge">
-                                        <i class="fa-solid fa-gem p-watermark-icon"></i>
-                                        <span class="p-watermark-text">Meghduti Paridhaan</span>
+                                    <div class="p-watermark-badge {{ !($siteLogoUrl ?? $logoUrl ?? null) ? 'fallback-badge' : '' }}">
+                                        @if($siteLogoUrl ?? $logoUrl ?? null)
+                                            <img src="{{ $siteLogoUrl ?? $logoUrl }}" alt="{{ $siteName ?? 'Logo' }}" class="p-watermark-logo-img" loading="lazy">
+                                        @else
+                                            <i class="fa-solid fa-gem p-watermark-icon"></i>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

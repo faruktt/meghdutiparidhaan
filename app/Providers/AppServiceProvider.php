@@ -51,8 +51,34 @@ class AppServiceProvider extends ServiceProvider
                 $navCategories = collect();
             }
 
+            $siteLogo = \App\Models\Setting::get('site_logo') ?: \App\Models\Setting::get('logo');
+            $siteFavicon = \App\Models\Setting::get('site_favicon') ?: \App\Models\Setting::get('favicon');
+            $siteLogoUrl = null;
+            if ($siteLogo) {
+                if (\Illuminate\Support\Str::startsWith($siteLogo, ['http://', 'https://'])) {
+                    $siteLogoUrl = $siteLogo;
+                } elseif (\Illuminate\Support\Str::startsWith($siteLogo, 'images/')) {
+                    $siteLogoUrl = asset($siteLogo);
+                } else {
+                    $siteLogoUrl = asset('images/' . $siteLogo);
+                }
+            } elseif ($siteFavicon) {
+                if (\Illuminate\Support\Str::startsWith($siteFavicon, ['http://', 'https://'])) {
+                    $siteLogoUrl = $siteFavicon;
+                } elseif (\Illuminate\Support\Str::startsWith($siteFavicon, 'images/')) {
+                    $siteLogoUrl = asset($siteFavicon);
+                } else {
+                    $siteLogoUrl = asset('images/' . $siteFavicon);
+                }
+            }
+
+            $siteName = \App\Models\Setting::get('site_name', 'Meghduti Paridhaan');
+
             $view->with('wishlistIds', $wishlistIds ?: []);
             $view->with('navCategories', $navCategories ?: collect());
+            $view->with('siteLogoUrl', $siteLogoUrl);
+            $view->with('logoUrl', $siteLogoUrl);
+            $view->with('siteName', $siteName);
         });
     }
 }
